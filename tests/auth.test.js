@@ -58,6 +58,15 @@ describe('Phase 1 — authentication', () => {
     expect(ev.n).toBeGreaterThan(0);
   });
 
+  it('sets a session marker cookie on login and clears it on logout', async () => {
+    const o = await registerOrg(t);
+    const login = await request(t.app).post('/api/v1/auth/login').send({ email: o.email, password: o.password, rememberMe: true }).expect(200);
+    const cookies = login.headers['set-cookie'].join(';');
+    expect(cookies).toMatch(/tr_session=1; Max-Age=\d+; Path=\//);
+    const logout = await request(t.app).post('/api/v1/auth/logout').set('Authorization', `Bearer ${login.body.data.accessToken}`).expect(204);
+    expect(logout.headers['set-cookie'].join(';')).toMatch(/tr_session=;/);
+  });
+
   it('logout revokes the session', async () => {
     const o = await registerOrg(t);
     await o.api.post('/api/v1/auth/logout').expect(204);

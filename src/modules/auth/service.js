@@ -128,14 +128,20 @@ export async function switchSessionOrg(sessionId, userId, orgId) {
 
 const cookieBase = () => ({ httpOnly: true, secure: env.COOKIE_SECURE, sameSite: 'lax' });
 
+/**
+ * Session marker cookie (no secret, value '1'): lives as long as the refresh token and is sent on
+ * every path, so the front end's route guard (Next.js proxy) can tell a signed-in browser from an
+ * anonymous one. Authorization itself always uses the access/refresh tokens.
+ */
+export const SESSION_COOKIE = 'tr_session';
+
 export function setAuthCookies(res, { accessToken, refreshToken, ttl, rememberMe }) {
   res.cookie(ACCESS_COOKIE, accessToken, { ...cookieBase(), path: '/', maxAge: env.ACCESS_TOKEN_TTL_SECONDS * 1000 });
-  if (refreshToken)
-    res.cookie(REFRESH_COOKIE, refreshToken, {
-      ...cookieBase(),
-      path: '/api/v1/auth',
-      ...(rememberMe ? { maxAge: ttl * 1000 } : {}),
-    });
+  if (refreshToken) {
+    const persist = rememberMe ? { maxAge: ttl * 1000 } : {};
+    res.cookie(REFRESH_COOKIE, refreshToken, { ...cookieBase(), path: '/api/v1/auth', ...persist });
+    res.cookie(SESSION_COOKIE, '1', { ...cookieBase(), path: '/', ...persist });
+  }
 }
 
 export function setAccessCookie(res, accessToken) {
@@ -145,6 +151,7 @@ export function setAccessCookie(res, accessToken) {
 export function clearAuthCookies(res) {
   res.clearCookie(ACCESS_COOKIE, { ...cookieBase(), path: '/' });
   res.clearCookie(REFRESH_COOKIE, { ...cookieBase(), path: '/api/v1/auth' });
+  res.clearCookie(SESSION_COOKIE, { ...cookieBase(), path: '/' });
 }
 
 /** Single-use token stored hashed (email verify, password reset, MFA step, WebAuthn challenge). */

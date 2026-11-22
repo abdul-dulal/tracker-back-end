@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { env, isTest } from '../config/env.js';
+import { env, isTest, isProd } from '../config/env.js';
 import { logger } from './logger.js';
 
 /** Captured emails in test mode (assert in tests). */
@@ -43,7 +43,12 @@ export async function sendMail({ to, subject, html, text, attachments }) {
   }
   try {
     const info = await getTransport().sendMail(message);
-    if (!env.SMTP_HOST) logger.info({ to, subject }, 'email (no SMTP configured, logged only)');
+    if (!env.SMTP_HOST) {
+      // Without SMTP nothing is delivered. In development, print the plain-text body so links
+      // (invitations, password resets, email verification) can be copied from the terminal.
+      logger.info({ to, subject, ...(isProd ? {} : { text }) }, 'email (no SMTP configured, logged only)');
+      if (!isProd && text) console.log(`\n✉  ${subject} → ${to}\n${text}\n`);
+    }
     return info;
   } catch (err) {
     logger.error({ err, to, subject }, 'email send failed');

@@ -276,7 +276,7 @@ export async function setAssignees(ctx, task, memberIds, { notifyAdded = true } 
       type: 'task.assigned',
       title: `New task: ${task.title}`,
       body: `You were assigned to "${task.title}"${task.project_name ? ` in ${task.project_name}` : ''}.`,
-      link: `/projects/${task.project_id}/tasks/${task.id}`,
+      link: `/tasks/${task.id}`,
       data: { taskId: task.id, projectId: task.project_id },
     });
   return added;

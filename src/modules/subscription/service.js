@@ -136,7 +136,7 @@ export async function ownerUserIds(orgId) {
 }
 
 export async function noticeOwners(orgId, title, body, data) {
-  return notify({ orgId, userIds: await ownerUserIds(orgId), type: 'subscription.notice', title, body, link: '/settings/billing', data });
+  return notify({ orgId, userIds: await ownerUserIds(orgId), type: 'subscription.notice', title, body, link: '/settings/subscription', data });
 }
 
 export async function subscriptionDto(orgId) {

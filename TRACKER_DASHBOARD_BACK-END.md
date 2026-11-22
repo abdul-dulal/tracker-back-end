@@ -1836,38 +1836,39 @@ Update this table at the end of every work session (keep it identical to the tab
 
 | # | Module | Phase | Back-end | Front-end | Overall status | Notes / Blockers |
 |---|---|---|---|---|---|---|
-| 0 | Foundation / project setup | 0 | Backend Completed | Not Started | Backend Completed | Both repos are empty scaffolds |
-| M01 | Authentication & User Management | 1 | Backend Completed | Not Started | Backend Completed | |
-| M02 | Role & Permission Management | 1 | Backend Completed | Not Started | Backend Completed | |
-| M03 | Employee Management | 2 | Backend Completed | Not Started | Backend Completed | |
-| M04 | Team & Department Management | 2 | Backend Completed | Not Started | Backend Completed | |
-| M05 | Time Tracking System | 4 | Backend Completed | Not Started | Backend Completed | Most important |
-| M06 | Screenshot Monitoring | 5 | Backend Completed | Not Started | Backend Completed | |
-| M07 | Employee Activity Monitoring | 5 | Backend Completed | Not Started | Backend Completed | |
-| M08 | Application & Website Tracking | 5 | Backend Completed | Not Started | Backend Completed | |
-| M09 | Project Management | 3 | Backend Completed | Not Started | Backend Completed | |
-| M10 | Task Management | 3 | Backend Completed | Not Started | Backend Completed | |
-| M11 | Kanban Board | 3 | Backend Completed | Not Started | Backend Completed | |
-| M12 | Attendance & Work Schedule | 2 / 6 | Backend Completed | Not Started | Backend Completed | Schedules in P2, attendance in P6 |
-| M13 | Break & Idle Time Management | 4 | Backend Completed | Not Started | Backend Completed | |
-| M14 | Timesheet Management | 6 | Backend Completed | Not Started | Backend Completed | |
-| M15 | Reports & Analytics | 8 | Backend Completed | Not Started | Backend Completed | |
-| M16 | Employee Performance & Productivity | 8 | Backend Completed | Not Started | Backend Completed | |
-| M17 | Client Portal | 9 | Backend Completed | Not Started | Backend Completed | Client entity in P2 |
-| M18 | Billing & Payroll Management | 9 | Backend Completed | Not Started | Backend Completed | |
-| M19 | Notifications & Alerts | 7 | Backend Completed | Not Started | Backend Completed | |
-| M20 | Desktop Support & Offline Sync | 4 / 5 | Backend Completed | n/a (status UI only) | Backend Completed | Desktop app out of scope |
-| M21 | Admin Dashboard & Control Center | 7 | Backend Completed | Not Started | Backend Completed | |
-| M22 | Settings & Configuration | 2 | Backend Completed | Not Started | Backend Completed | |
-| M23 | API & Third-Party Integrations | 10 | Backend Completed | Not Started | Backend Completed | |
-| M24 | Security & Data Protection | 1 → 11 | Backend Completed | Not Started | Backend Completed | Cross-cutting |
-| M25 | Subscription & SaaS Billing | 1 / 10 | Backend Completed | Not Started | Backend Completed | Limits in P1, Stripe in P10 |
+| 0 | Foundation / project setup | 0 | Backend Completed | Integration Completed | Testing | Both repos are empty scaffolds |
+| M01 | Authentication & User Management | 1 | Backend Completed | Integration Completed | Testing | |
+| M02 | Role & Permission Management | 1 | Backend Completed | Integration Completed | Testing | |
+| M03 | Employee Management | 2 | Backend Completed | Integration Completed | Testing | |
+| M04 | Team & Department Management | 2 | Backend Completed | Integration Completed | Testing | |
+| M05 | Time Tracking System | 4 | Backend Completed | Integration Completed | Testing | Most important |
+| M06 | Screenshot Monitoring | 5 | Backend Completed | Integration Completed | Testing | |
+| M07 | Employee Activity Monitoring | 5 | Backend Completed | Integration Completed | Testing | |
+| M08 | Application & Website Tracking | 5 | Backend Completed | Integration Completed | Testing | |
+| M09 | Project Management | 3 | Backend Completed | Integration Completed | Testing | |
+| M10 | Task Management | 3 | Backend Completed | Integration Completed | Testing | |
+| M11 | Kanban Board | 3 | Backend Completed | Integration Completed | Testing | |
+| M12 | Attendance & Work Schedule | 2 / 6 | Backend Completed | Integration Completed | Testing | Schedules in P2, attendance in P6 |
+| M13 | Break & Idle Time Management | 4 | Backend Completed | Integration Completed | Testing | |
+| M14 | Timesheet Management | 6 | Backend Completed | Integration Completed | Testing | |
+| M15 | Reports & Analytics | 8 | Backend Completed | Integration Completed | Testing | |
+| M16 | Employee Performance & Productivity | 8 | Backend Completed | Integration Completed | Testing | |
+| M17 | Client Portal | 9 | Backend Completed | Integration Completed | Testing | Client entity in P2 |
+| M18 | Billing & Payroll Management | 9 | Backend Completed | Integration Completed | Testing | |
+| M19 | Notifications & Alerts | 7 | Backend Completed | Integration Completed | Testing | |
+| M20 | Desktop Support & Offline Sync | 4 / 5 | Backend Completed | Integration Completed (status UI) | Testing | Desktop app out of scope |
+| M21 | Admin Dashboard & Control Center | 7 | Backend Completed | Integration Completed | Testing | |
+| M22 | Settings & Configuration | 2 | Backend Completed | Integration Completed | Testing | |
+| M23 | API & Third-Party Integrations | 10 | Backend Completed | Integration Completed | Testing | |
+| M24 | Security & Data Protection | 1 → 11 | Backend Completed | Integration Completed | Testing | Cross-cutting |
+| M25 | Subscription & SaaS Billing | 1 / 10 | Backend Completed | Integration Completed | Testing | Limits in P1, Stripe in P10 |
 
 ### Progress log
 | Date | Module / Feature IDs | Change | Status after |
 |---|---|---|---|
 | 2026-11-19 | — | Requirements analysis, codebase analysis, guide created | Not Started |
 | 2026-11-20 | All modules (M01–M25) | Back-end implemented: 474 API operations, 103 tables, 28 test files / 238 integration tests passing on PGlite; server boot + HTTP smoke test OK. Front-end integration pending. | Backend Completed |
+| 2026-11-22 | All modules | Front-end designed and integrated: 98 routes (dashboard, client portal, super admin, public share), all wired to the real API; full production build passes; render-tested against the real backend with demo data as owner, manager and employee (no crashes, no unexpected API errors) and in design (mock) mode. Remaining: hands-on QA of interactive flows (forms, drag & drop, uploads, payments) and the client role against the real API. | Testing |
 
 ---
 

@@ -93,8 +93,8 @@ r.post('/checkout', { summary: 'Start Stripe Checkout (dev mode applies the plan
   const session = await stripe('POST', '/checkout/sessions', {
     mode: 'subscription',
     line_items: [lineItem],
-    success_url: `${env.FRONTEND_URL}/settings/billing?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${env.FRONTEND_URL}/settings/billing?checkout=cancelled`,
+    success_url: `${env.FRONTEND_URL}/settings/subscription?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${env.FRONTEND_URL}/settings/subscription?checkout=cancelled`,
     client_reference_id: ctx.orgId,
     customer: sub?.stripe_customer_id ?? undefined,
     customer_email: sub?.stripe_customer_id ? undefined : owner?.email,
@@ -189,7 +189,7 @@ r.post('/portal', { summary: 'Stripe customer portal session', ids: 'SUB-14', pe
   if (!stripeKey()) throw paymentsNotConfigured();
   const sub = await loadSubscription(req.ctx.orgId);
   if (!sub?.stripe_customer_id) throw conflict('NO_BILLING_ACCOUNT', 'No billing account yet — complete a checkout first');
-  const session = await stripe('POST', '/billing_portal/sessions', { customer: sub.stripe_customer_id, return_url: `${env.FRONTEND_URL}/settings/billing` });
+  const session = await stripe('POST', '/billing_portal/sessions', { customer: sub.stripe_customer_id, return_url: `${env.FRONTEND_URL}/settings/subscription` });
   ok(res, { url: session.url });
 });
 

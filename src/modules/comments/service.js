@@ -19,7 +19,7 @@ export async function resolveEntity(ctx, entityType, entityId, mode = 'view') {
     const t = await loadTask(ctx.orgId, entityId);
     if (mode === 'write') await assertTaskUpdate(ctx, t);
     else await assertProjectAccess(ctx, 'tasks.view', t.project_id);
-    return { type: 'task', id: t.id, projectId: t.project_id, title: t.title, task: t, link: `/projects/${t.project_id}/tasks/${t.id}` };
+    return { type: 'task', id: t.id, projectId: t.project_id, title: t.title, task: t, link: `/tasks/${t.id}` };
   }
   if (entityType === 'comment') {
     const c = await db.one('SELECT * FROM comments WHERE id = $1 AND organization_id = $2 AND deleted_at IS NULL', [entityId, ctx.orgId]);

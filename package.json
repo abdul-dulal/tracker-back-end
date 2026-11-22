@@ -10,7 +10,8 @@
     "worker": "node src/worker.js",
     "migrate": "node src/db/migrate-cli.js",
     "seed": "node src/db/migrate-cli.js",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "seed:demo": "node src/db/demo-seed.js"
   },
   "keywords": [],
   "author": "",

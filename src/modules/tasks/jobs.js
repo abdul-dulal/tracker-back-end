@@ -31,7 +31,7 @@ export async function sendDueReminders() {
         type: 'task.deadline_reminder',
         title: `Task due tomorrow: ${t.title}`,
         body: `"${t.title}" in ${t.project_name} is due on ${t.due_date}.`,
-        link: `/projects/${t.project_id}/tasks/${t.id}`,
+        link: `/tasks/${t.id}`,
         data: { taskId: t.id, projectId: t.project_id, dueDate: t.due_date },
       });
     } catch (err) {
@@ -62,7 +62,7 @@ export async function sendOverdueAlerts() {
         type: 'task.overdue',
         title: `Task overdue: ${t.title}`,
         body: `"${t.title}" in ${t.project_name} was due on ${t.due_date}.`,
-        link: `/projects/${t.project_id}/tasks/${t.id}`,
+        link: `/tasks/${t.id}`,
         data: { taskId: t.id, projectId: t.project_id, dueDate: t.due_date },
       });
     } catch (err) {

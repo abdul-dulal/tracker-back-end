@@ -1,3 +1,4 @@
+import { PROVIDER_FIELDS, BRAND_COLORS, CATEGORY_LABELS } from './fields.js';
 import { db } from '../../lib/db.js';
 import { encrypt, decrypt } from '../../lib/crypto.js';
 import { notFound } from '../../lib/errors.js';
@@ -21,6 +22,9 @@ export function integrationDto(p, row) {
     provider: p.key,
     name: p.name,
     category: p.category,
+    categoryLabel: CATEGORY_LABELS[p.category] ?? p.category,
+    brandColor: BRAND_COLORS[p.key] ?? null,
+    fields: PROVIDER_FIELDS[p.key] ?? [],
     authType: p.authType,
     description: p.description,
     connected: !!row && row.status !== 'disconnected',

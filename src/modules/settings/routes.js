@@ -9,6 +9,7 @@ import { managedMemberIds } from '../../rbac/scope.js';
 import { getOrgPlan } from '../subscription/features.js';
 import { getEffectiveSettings, TRACKING_FIELDS } from './effective.js';
 import { managedTeamIds } from '../teams/service.js';
+import { SCREENSHOT_INTERVALS } from '../subscription/catalog.js';
 
 /** M22 tracking settings (SET-T01…T12), privacy settings and consents (PRIV-01…PRIV-05). */
 const tracking = createRouter('/tracking-settings', 'Settings');
@@ -81,7 +82,7 @@ tracking.get(
 const nullable = (s) => s.nullable().optional();
 const fieldsSchema = {
   screenshotsEnabled: nullable(z.boolean()),
-  screenshotIntervalMinutes: nullable(z.union([z.literal(3), z.literal(5), z.literal(10), z.literal(15)])),
+  screenshotIntervalMinutes: nullable(z.union(SCREENSHOT_INTERVALS.map((n) => z.literal(n)))),
   screenshotRandom: nullable(z.boolean()),
   screenshotBlur: nullable(z.boolean()),
   screenshotRetentionDays: nullable(z.number().int().min(1).max(3650)),

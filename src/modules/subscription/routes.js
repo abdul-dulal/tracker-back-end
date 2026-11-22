@@ -6,6 +6,7 @@ import { badRequest, conflict, forbidden, unprocessable } from '../../lib/errors
 import { audit } from '../../lib/audit.js';
 import { env } from '../../config/env.js';
 import { getOrgPlan, countActiveSeats, maxScreenshotRetentionDays } from './features.js';
+import { PLAN_CODES } from './catalog.js';
 import {
   stripe,
   stripeKey,
@@ -28,7 +29,7 @@ const canRead = (req, _res, next) => {
   if (!req.ctx.can(MANAGE) && !req.ctx.isAdminLike()) throw forbidden('Owner or admin only');
   next();
 };
-const planBody = z.object({ planCode: z.enum(['free', 'starter', 'professional', 'enterprise']), interval: z.enum(['month', 'year']).optional() });
+const planBody = z.object({ planCode: z.enum(PLAN_CODES), interval: z.enum(['month', 'year']).optional() });
 const priceId = (plan, interval) => plan[interval === 'year' ? 'stripe_price_year_id' : 'stripe_price_month_id'];
 const selfServe = (plan) => !(plan.code === 'enterprise' && Number(plan.price_month) === 0 && Number(plan.price_year) === 0);
 

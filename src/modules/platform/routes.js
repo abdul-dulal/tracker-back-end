@@ -6,6 +6,7 @@ import { notFound, badRequest } from '../../lib/errors.js';
 import { audit as writeAudit } from '../../lib/audit.js';
 import { countActiveSeats } from '../subscription/features.js';
 import { planDto } from '../subscription/routes-plans.js';
+import { PLAN_CODES, PLAN_FEATURES, SCREENSHOT_INTERVALS } from '../subscription/catalog.js';
 import { auditQuery, listAudit } from '../audit/routes.js';
 import { intervalSql } from '../subscription/service.js';
 
@@ -118,7 +119,7 @@ r.patch(
       .object({
         status: z.enum(['active', 'suspended']).optional(),
         extendTrialDays: z.number().int().min(1).max(365).optional(),
-        planCode: z.enum(['free', 'starter', 'professional', 'enterprise']).optional(),
+        planCode: z.enum(PLAN_CODES).optional(),
         interval: z.enum(['month', 'year']).optional(),
         reason: z.string().max(500).optional(),
       })
@@ -259,6 +260,10 @@ const PLAN_COLS = {
 };
 const fullPlanDto = (p) => ({ ...planDto(p), stripePriceMonthId: p.stripe_price_month_id, stripePriceYearId: p.stripe_price_year_id });
 
+r.get('/plans/catalog', { ...S, summary: 'Plan codes and feature flags the plan editor can use', ids: 'SUB-01…SUB-04' }, async (_req, res) => {
+  ok(res, { codes: PLAN_CODES, features: PLAN_FEATURES, screenshotIntervals: SCREENSHOT_INTERVALS });
+});
+
 r.get('/plans', { ...S, summary: 'All plans (incl. hidden)', ids: 'SUB-01…SUB-04' }, async (_req, res) => {
   const rows = await db.many('SELECT * FROM plans ORDER BY sort_order');
   ok(res, rows.map(fullPlanDto));
@@ -271,7 +276,7 @@ r.post(
     summary: 'Create a plan',
     ids: 'SUB-01…SUB-04',
     body: z.object({
-      code: z.enum(['free', 'starter', 'professional', 'enterprise']),
+      code: z.enum(PLAN_CODES),
       ...planFields,
       currency: planFields.currency.default('USD'),
       perSeat: planFields.perSeat.default(true),

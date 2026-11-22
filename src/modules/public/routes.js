@@ -9,6 +9,11 @@ import { publicLimiter } from '../../middleware/rateLimit.js';
 import { memberContext } from '../reports/common.js';
 import { runReport } from '../reports/engine.js';
 import { definitionSchema } from '../reports/service.js';
+import { CURRENCIES } from '../currencies/service.js';
+import { planDto } from '../subscription/routes-plans.js';
+import { PLAN_FEATURES, SCREENSHOT_INTERVALS } from '../subscription/catalog.js';
+import { PROVIDERS } from '../integrations/providers/index.js';
+import { DEFAULT_ROLES } from '../../rbac/catalog.js';
 
 /** Unauthenticated, rate-limited public endpoints. */
 const r = createRouter('/public', 'Public');
@@ -55,5 +60,28 @@ r.get(
     });
   },
 );
+
+
+/**
+ * Public site metadata for pages without a session (landing page, registration):
+ * currencies, public plans and product facts — all derived from backend sources.
+ */
+r.get('/meta', { auth: 'public', summary: 'Public site metadata (currencies, plans, product facts)', middleware: publicLimiter }, async (_req, res) => {
+  const plans = (await db.many('SELECT * FROM plans WHERE is_public ORDER BY sort_order')).map(planDto);
+  const releases = await db.many("SELECT DISTINCT os FROM app_releases WHERE channel = 'stable'");
+  const platforms = releases.length ? releases.map((x) => x.os) : ['windows', 'macos', 'linux'];
+  ok(res, {
+    currencies: CURRENCIES,
+    plans,
+    planFeatures: PLAN_FEATURES,
+    trialDays: 14,
+    facts: {
+      builtInRoles: DEFAULT_ROLES.length + 1, // + platform Super Admin
+      screenshotIntervals: SCREENSHOT_INTERVALS,
+      platforms,
+      integrations: PROVIDERS.length,
+    },
+  });
+});
 
 export default r;
